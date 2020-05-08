@@ -1,0 +1,56 @@
+body {
+    display: flex;
+}
+
+section {
+    display: block;
+}
+
+form {
+    margin: auto;
+    margin-top: 3rem;
+}
+
+input,
+textarea {
+    display: block;
+    width: 50%;
+    font-size: medium;
+    border-radius: 10px;
+    ;
+    padding: 0.25rem 1rem;
+    margin: 0.5rem 1rem;
+}
+
+section {
+    display: flex;
+    align-items: center;
+}
+
+section>div {
+    width: 27%;
+    max-width: 27%;
+}
+
+h4 {
+    margin-top: 0.1rem;
+    margin-bottom: 0.5 rem;
+    margin-right: 2rem;
+}
+
+button {
+    display: block;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #355C7D;
+    color: white;
+    font-size: medium;
+    border: none;
+    text-decoration: none;
+}
+
+button:hover {
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 5px 15px rgba(57, 74, 151, 0.4);
+}
