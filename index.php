@@ -107,7 +107,7 @@ session_start();
                 <h4>Дата на раждане</h4>
             </div>
             <input type="date" name="birthdate" placeholder="Дата на раждане" required onchange="calculate_sign(event)" value='<?php echo array_key_exists("birthdate", $fields) ? $fields["birthdate"] : ''; ?>'>
-            <input type="text" name="zodiac_sign" id="zodiac_sign" value='<?php echo array_key_exists("zodiac_sign", $fields) ? $fields["zodiac_sign"] : ''; ?>'>
+            <input type="text" name="zodiac_sign" id="zodiac_sign" readonly value='<?php echo array_key_exists("zodiac_sign", $fields) ? $fields["zodiac_sign"] : ''; ?>'>
 			<p><?php
 				if( isset($_SESSION['birthdate']) )
 				{
