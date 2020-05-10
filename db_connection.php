@@ -8,8 +8,7 @@ function add_user(&$params)
     $db = "62169_Bistra_Chilikova";
     $username = "root";
     $pass = "";
-    try
-    {
+    try {
         $conn = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $username, $pass);
         $sql = "INSERT INTO Users (fname, lname, course_year, course_major, fac_number, group_number, birthdate, website, photo, letter, zodiac_sign) VALUES (:fname, :lname, :course_year, :course_major, :fac_number,  :group_number, :birthdate, :website, :photo, :letter, :zodiac_sign)";
         $stmt = $conn->prepare($sql) or die("what?");
@@ -23,16 +22,8 @@ function add_user(&$params)
         exit();
         echo "New records created successfully";
     } catch (PDOException $e) {
-        //echo "Error: " . $e->getMessage();
         show_system_error(SYS_ERR_BAD_PASSWORD);
-        // array_push($_SESSION["errors"], SYS_ERR_BAD_PASSWORD);
-        // header("Location: ./fail.php");
-        // exit();
-    } catch (Exception $e)
-    {
-        //array_push($_SESSION["errors"], SYS_ERR_BAD_PASSWORD);
+    } catch (Exception $e) {
         show_system_error(SYS_ERR_OTHER);
     }
-
-
 }

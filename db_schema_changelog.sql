@@ -4,48 +4,19 @@ USE `62169_Bistra_Chilikova`;
 
 -- username: root
 -- password: ""
-
+-- needs access to the "photos" directory in htdocs
 CREATE TABLE Users (
+    -- decided not to rely on fac_number as primary key, since it's not unique in the world
     id INT AUTO_INCREMENT PRIMARY KEY,
-    fname VARCHAR(63),
-    lname VARCHAR(63),
-    course_year INT,
-    course_major VARCHAR(255),
-    fac_number VARCHAR(63),
-    group_number INT,
-    birthdate DATE,
-    website VARCHAR(255),
-    photo VARCHAR(255),
-    letter TEXT,
-    zodiac_sign VARCHAR(63)
-
+    fname VARCHAR(63) NOT NULL,
+    lname VARCHAR(63) NOT NULL,
+    course_year INT NOT NULL,
+    course_major VARCHAR(255) NOT NULL,
+    fac_number VARCHAR(63) NOT NULL,
+    group_number INT NOT NULL,
+    birthdate DATE NOT NULL,
+    website VARCHAR(255) DEFAULT NULL,
+    photo VARCHAR(255) DEFAULT NULL,
+    letter TEXT NOT NULL,
+    zodiac_sign VARCHAR(63) NOT NULL
 );
-
-INSERT INTO
-    Users (
-        fname,
-        lname,
-        course_year,
-        course_major,
-        fac_number,
-        group_number,
-        birthdate,
-        website,
-        photo,
-        letter,
-        zodiac_sign
-    )
-VALUES
-    (
-        'Bistra',
-        'Chilikova',
-        3,
-        'SI',
-        '62169',
-        1,
-        '1998-04-10',
-        'www.haha.com',
-        'tralala',
-        'wow! so motivational',
-        'Aries'
-    );

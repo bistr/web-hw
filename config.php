@@ -1,10 +1,4 @@
 <?php
-define("MAX_LENGTH_FNAME", 63);
-define("MAX_LENGTH_LNAME", 63);
-define("MAX_LENGTH_MAJOR", 255);
-define("MAX_LENGTH_FAC_NUMBER", 63);
-define("MAX_LENGTH_WEBSITE", 255);
-define("MAX_LENGTH_LETTER", 65535);
 
 const MAX_LENGTH = array(
     "fname" => 63,
@@ -34,6 +28,13 @@ const MIN_LENGTH = array(
     "birthdate" => 1
 );
 
+const ZODIAC = array("Овен", "Телец", "Близнаци", "Рак", "Лъв", "Дева", "Везни", "Скорпион", "Стрелец", "Козирог", "Водолей", "Риби");
+
+define("UPLOAD_FOLDER", "photos");
+define("SUCCESS_PAGE", "success.html");
+define("FAIL_PAGE", "fail.php");
+define("INDEX_PAGE", "index.php");
+
 define("ERR_MSG_REQUIRED", "Полето е задължително.");
 define("ERR_MSG_TOO_LONG", "Превишена дължина.");
 define("ERR_MSG_BAD_DATE", "Неправилна дата.");
@@ -41,17 +42,17 @@ define("ERR_MSG_NOT_NUMERIC", "Не е число.");
 define("ERR_MSG_IS_NEGATIVE", "Не може да е с отрицателна стойност.");
 define("ERR_MSG_NOT_IMAGE", "Файлът не е изображение.");
 define("ERR_MSG_WRONG_FORMAT", "Грешка в данните. Не спазва правилен формат.");
+define("ERR_MSG_BAD_ZODIAC", "Зодията не е в списъка с разрешени зодии.");
+define("ERR_MSG_WRONG_SIGN", "Зодията не е правилна.");
 define("SYS_ERR_CANT_UPLOAD", "Проблем с добавянето на изображение.");
+define("SYS_ERR_NOT_WRITABLE", "Проблем с добавянето на изображение. Имате ли достъп до директория " . UPLOAD_FOLDER . " в htdocs? Трябва да има write permission. Ако не съществува, я създайте и сложете права 777. Също така я има в ZIP-а.");
 define("SYS_ERR_BAD_PASSWORD", "Паролата за връзка с базата е грешна. Свържете се с администратор. Също така - има я в SQL файла. ;)");
 define("SYS_ERR_BAD_REQUEST", "Лоша заявка.");
 define("SYS_ERR_OTHER", "Проблем със системата. Опитайте по-късно.");
 
-define("UPLOAD_FOLDER","photos");
-define("SUCCESS_PAGE","success.html");
-define("FAIL_PAGE","fail.php");
-define("INDEX_PAGE","index.php");
 
-define("SESSION_KEY_SYS_ERRORS","SYSTEM_ERRORS");
+
+define("SESSION_KEY_SYS_ERRORS", "SYSTEM_ERRORS");
 
 const KEYS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "zodiac_sign", "website", "photo", "letter");
 const REQUIRED_FIELDS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "letter", "zodiac_sign");
@@ -70,7 +71,7 @@ const PATTERN = array(
     "photo" => ".",
     "birthdate" => "(\d{4}-\d{2}-\d{2})",
     "zodiac_sign" => "[A-ZА-Яa-zа-я\-]",
-    "website" => ".", 
+    "website" => ".",
     "letter" => "."
 );
 

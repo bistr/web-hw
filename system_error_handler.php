@@ -10,4 +10,3 @@ function show_system_error(String $error)
     header("Location: ./".FAIL_PAGE);
     exit();
 }
-?>

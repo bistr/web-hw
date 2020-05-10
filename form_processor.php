@@ -4,11 +4,15 @@ include "./db_connection.php";
 function upload_image(String $key,  &$params)
 {
     $filename = $_FILES[$key]["name"];
-    if ($filename === "")
-    {
+    if ($filename === "") {
         return;
     }
     $source = $_FILES[$key]["tmp_name"];
+
+    if (!is_writable("./" . UPLOAD_FOLDER)) {
+        show_system_error(SYS_ERR_NOT_WRITABLE);
+    }
+
     $destination = "./" . UPLOAD_FOLDER . "/" . basename($filename);
 
     if (move_uploaded_file($source, $destination)) {
