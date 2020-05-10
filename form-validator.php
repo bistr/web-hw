@@ -126,7 +126,9 @@ function process_data(&$params, &$error_message, &$errors)
         {
             echo ($key . " = " . $value . "<br>");
         }
+        unset($_SESSION['fields']);
         add_user($params);
+        
     }
     else 
     {
