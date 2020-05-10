@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-$_SESSION["errors"] = array();
 include "./config.php";
 
 ?>
@@ -33,7 +32,7 @@ include "./config.php";
 			<label for=".$key.">".PRETTY_PRINT[$key]." ".(in_array($key, REQUIRED_FIELDS) ? '*' : '')."</label>";
 			if ($key != "letter")
 			{
-				echo "<input type=".FIELD_TYPE[$key]." ".(in_array($key, REQUIRED_FIELDS) ? 'required' : '')." ".(in_array($key, READONLY_FIELDS) ? 'readonly' : '')." id=".$key." name=".$key." pattern = ".PATTERN[$key]." value = ".(array_key_exists($key, $fields) ? $fields[$key] : '').">";
+				echo "<input type=".FIELD_TYPE[$key]." min='1' ".(in_array($key, REQUIRED_FIELDS) ? 'required' : '')." ".(in_array($key, READONLY_FIELDS) ? 'readonly' : '')." id=".$key." name=".$key." pattern = ".PATTERN[$key]." value = ".(array_key_exists($key, $fields) ? $fields[$key] : '').">";
 			}
 			else
 			{

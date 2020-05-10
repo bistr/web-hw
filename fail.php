@@ -1,5 +1,6 @@
 <?php
 session_start();
+include "./config.php";
 ?>
 
 <!DOCTYPE html>
@@ -10,15 +11,19 @@ session_start();
     </head>
     <body>
     <p><?php
-				if (isset($_SESSION['errors'])) {
-                    foreach($_SESSION["errors"] as $err)
+				if (isset($_SESSION[SESSION_KEY_SYS_ERRORS])) {
+                    foreach($_SESSION[SESSION_KEY_SYS_ERRORS] as $err)
                     {
                         echo $err."<br>";
                     }
 					
 
-					unset($_SESSION['errors']);
-				}
+					unset($_SESSION[SESSION_KEY_SYS_ERRORS]);
+                }
+                else
+                {
+                    echo "No system errors.";
+                }
 				?>
 			</p>
     </body>

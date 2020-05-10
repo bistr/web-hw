@@ -1,6 +1,6 @@
 <?php
 
-include "./db-connection.php";
+include "./form-processor.php";
 
 session_start();
 
@@ -96,7 +96,6 @@ function check_if_positive(String $key, &$params, &$errors)
 
 function validate_form(&$params, &$maxlen, &$errors)
 {
-    echo ("Validating <br>");
 
     foreach (REQUIRED_FIELDS as $key) {
         check_if_filled($key, $params, $errors);
@@ -123,7 +122,13 @@ function validate_form(&$params, &$maxlen, &$errors)
 
 function validate_image(String $key, &$errors)
 {
-	$filetype = $_FILES[$key]["type"];
+    $filetype = $_FILES[$key]["type"];
+    $filename = $_FILES[$key]["type"];
+
+    if($filename == "")
+    {
+        return;
+    }
     
     if(substr( $filetype, 0, 5 ) != "image")
     {
@@ -131,86 +136,17 @@ function validate_image(String $key, &$errors)
     }
 }
 
-function upload_image(String $key, &$system_errors, &$params)
-{
-    $upload_folder = "photos";
-	$filename = $_FILES[$key]["name"];
-    $source = $_FILES[$key]["tmp_name"];
-    $destination = "./".$upload_folder."/".basename($filename);
-    
-    if (move_uploaded_file($source, $destination))
-    {
-        $params[$key] = $destination;
-        //$system_errors[$key] = SYS_ERR_CANT_UPLOAD;
-    }
-    else
-    {
-        $system_errors[$key] = SYS_ERR_CANT_UPLOAD;
-        array_push($_SESSION["errors"], SYS_ERR_CANT_UPLOAD);
-    }
-}
 
-function upload_all_images(&$system_errors, &$params)
-{
-    foreach (IMAGE_FIELDS as $image)
-    {   
-        upload_image($image, $system_errors, $params);
-    }
-}
-
-
-
-function process_data(&$params, &$errors, &$system_errors)
-{
-    if (count($system_errors) != 0)
-    {
-        header("Location: ./fail.php");
-        exit();
-        // foreach($system_errors as $key => $error)
-        // {
-        //     echo ($error . "<br>");
-        // }
-        // return;
-    }
-    if (count($errors) == 0) 
-    {
-        foreach ($params as $key => $value) 
-        {
-            echo ($key . " = " . $value . "<br>");
-        }
-        unset($_SESSION['fields']);
-        add_user($params);
-        
-    }
-    else 
-    {
-        foreach ($errors as $key => $err) 
-        {
-            $_SESSION[$key] = $err;
-
-        }
-
-
-    header("Location: ./index.php");
-    exit();
-
-
-
-    }
-}
 
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
     echo "Bad request.";
     exit();
 }
 
-
-
 $errors = array();
-$system_errors = array();
 $params = create_param_list();
 $maxlen = create_maxlen_arr();
 
 validate_form($params, $maxlen, $errors);
-upload_all_images($system_errors, $params);
-process_data($params,  $errors, $system_errors);
+process_data($params,  $errors);
+

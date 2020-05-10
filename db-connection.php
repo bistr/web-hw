@@ -1,5 +1,6 @@
 <?php
 include "./config.php";
+include "./system_error_handler.php";
 
 function add_user(&$params)
 {
@@ -23,12 +24,14 @@ function add_user(&$params)
         echo "New records created successfully";
     } catch (PDOException $e) {
         //echo "Error: " . $e->getMessage();
-        array_push($_SESSION["errors"], SYS_ERR_BAD_PASSWORD);
-        header("Location: ./fail.php");
-        exit();
+        show_system_error(SYS_ERR_BAD_PASSWORD);
+        // array_push($_SESSION["errors"], SYS_ERR_BAD_PASSWORD);
+        // header("Location: ./fail.php");
+        // exit();
     } catch (Exception $e)
     {
-        $_SESSION["error"] = "bad password";
+        //array_push($_SESSION["errors"], SYS_ERR_BAD_PASSWORD);
+        show_system_error(SYS_ERR_OTHER);
     }
 
 

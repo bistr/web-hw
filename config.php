@@ -16,6 +16,13 @@ define("SYS_ERR_CANT_UPLOAD", "Проблем с добавянето на из�
 define("SYS_ERR_BAD_PASSWORD", "Паролата за връзка с базата е грешна. Свържете се с администратор. Също така - има я в SQL файла. ;)");
 define("SYS_ERR_OTHER", "Проблем със системата. Опитайте по-късно.");
 
+define("UPLOAD_FOLDER","photos");
+define("SUCCESS_PAGE","success.html");
+define("FAIL_PAGE","fail.php");
+define("INDEX_PAGE","index.php");
+
+define("SESSION_KEY_SYS_ERRORS","SYSTEM_ERRORS");
+
 const KEYS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "zodiac_sign", "website", "photo", "letter");
 const REQUIRED_FIELDS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "letter", "zodiac_sign");
 const READONLY_FIELDS = array("zodiac_sign");
