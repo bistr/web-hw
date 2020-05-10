@@ -16,8 +16,9 @@ define("SYS_ERR_CANT_UPLOAD", "Проблем с добавянето на из�
 define("SYS_ERR_BAD_PASSWORD", "Паролата за връзка с базата е грешна. Свържете се с администратор. Също така - има я в SQL файла. ;)");
 define("SYS_ERR_OTHER", "Проблем със системата. Опитайте по-късно.");
 
-const KEYS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "website", "photo", "letter", "zodiac_sign");
+const KEYS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "zodiac_sign", "website", "photo", "letter");
 const REQUIRED_FIELDS = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "letter", "zodiac_sign");
+const READONLY_FIELDS = array("zodiac_sign");
 const DATE_FIELDS = array("birthdate");
 const NUMBER_FIELDS = array("course_year", "group_number");
 const IMAGE_FIELDS = array("photo");
