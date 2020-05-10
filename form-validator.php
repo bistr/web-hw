@@ -16,6 +16,7 @@ define("ERR_MSG_BAD_DATE", "Неправилна дата.");
 define("ERR_MSG_NOT_NUMERIC", "Не е число.");
 define("ERR_MSG_IS_NEGATIVE", "Не може да е с отрицателна стойност.");
 define("ERR_MSG_NOT_IMAGE", "Файлът не е изображение.");
+define("SYS_ERR_CANT_UPLOAD", "Проблем с добавянето на изображение.");
 
 session_start();
 
@@ -32,7 +33,7 @@ function create_param_list(&$keys)
 {
     $params = array();
     foreach ($keys as $key) {
-        if ($key != "photo")
+        if (array_key_exists($key, $_POST))
         {
             $params[$key] = format_input($_POST[$key]);
         }
@@ -151,17 +152,20 @@ function validate_image(String $key, &$errors)
 
 function upload_image(String $key, &$system_errors, &$params)
 {
+    $upload_folder = "photos";
 	$filename = $_FILES[$key]["name"];
     $source = $_FILES[$key]["tmp_name"];
-    $destination = "./photos/".basename($filename);
+    $destination = "./".$upload_folder."/".basename($filename);
     
     if (move_uploaded_file($source, $destination))
     {
         $params[$key] = $destination;
+        //$system_errors[$key] = SYS_ERR_CANT_UPLOAD;
     }
     else
     {
-        $system_errors[$key] = "Couldn't upload";
+        $system_errors[$key] = SYS_ERR_CANT_UPLOAD;
+        array_push($_SESSION["errors"], SYS_ERR_CANT_UPLOAD);
     }
 }
 
@@ -179,11 +183,13 @@ function process_data(&$params, &$errors, &$system_errors)
 {
     if (count($system_errors) != 0)
     {
-        foreach($errors as $key => $error)
-        {
-            echo ($error . "<br>");
-        }
-        return;
+        header("Location: ./fail.php");
+        exit();
+        // foreach($system_errors as $key => $error)
+        // {
+        //     echo ($error . "<br>");
+        // }
+        // return;
     }
     if (count($errors) == 0) 
     {
@@ -212,13 +218,9 @@ function process_data(&$params, &$errors, &$system_errors)
     }
 }
 
-
-
-
-//$fname = $lname = $course_year = $course_major = $fac_number = $website = $group_number = $birthdate = $photo = $letter = "";
-
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
-    return;
+    echo "Bad request.";
+    exit();
 }
 
 

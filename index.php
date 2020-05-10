@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+$_SESSION["errors"] = array();
 
 ?>
 <!DOCTYPE html>
