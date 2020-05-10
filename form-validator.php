@@ -2,22 +2,6 @@
 
 include "./db-connection.php";
 
-
-define("MAX_LENGTH_FNAME", 63);
-define("MAX_LENGTH_LNAME", 63);
-define("MAX_LENGTH_MAJOR", 255);
-define("MAX_LENGTH_FAC_NUMBER", 63);
-define("MAX_LENGTH_WEBSITE", 255);
-define("MAX_LENGTH_LETTER", 65535);
-
-define("ERR_MSG_REQUIRED", "Полето е задължително.");
-define("ERR_MSG_TOO_LONG", "Превишена дължина.");
-define("ERR_MSG_BAD_DATE", "Неправилна дата.");
-define("ERR_MSG_NOT_NUMERIC", "Не е число.");
-define("ERR_MSG_IS_NEGATIVE", "Не може да е с отрицателна стойност.");
-define("ERR_MSG_NOT_IMAGE", "Файлът не е изображение.");
-define("SYS_ERR_CANT_UPLOAD", "Проблем с добавянето на изображение.");
-
 session_start();
 
 
@@ -29,10 +13,10 @@ function format_input($data)
     return $data;
 }
 
-function create_param_list(&$keys)
+function create_param_list()
 {
     $params = array();
-    foreach ($keys as $key) {
+    foreach (KEYS as $key) {
         if (array_key_exists($key, $_POST))
         {
             $params[$key] = format_input($_POST[$key]);
@@ -110,11 +94,11 @@ function check_if_positive(String $key, &$params, &$errors)
     }
 }
 
-function validate_form(&$params, &$maxlen, &$errors, &$required, &$dates, &$numbers, &$images)
+function validate_form(&$params, &$maxlen, &$errors)
 {
     echo ("Validating <br>");
 
-    foreach ($required as $key) {
+    foreach (REQUIRED_FIELDS as $key) {
         check_if_filled($key, $params, $errors);
     }
 
@@ -122,19 +106,16 @@ function validate_form(&$params, &$maxlen, &$errors, &$required, &$dates, &$numb
         check_if_valid_length($key, $params, $maximum_length, $errors);
     }
 
-    foreach ($dates as $key) {
+    foreach (DATE_FIELDS as $key) {
         check_if_valid_date($key, $params, $errors);
     }
 
-    foreach ($numbers as $key) {
+    foreach (NUMBER_FIELDS as $key) {
         check_if_number($key, $params, $errors);
-    }
-
-    foreach ($numbers as $key) {
         check_if_positive($key, $params, $errors);
     }
 
-    foreach($images as $image)
+    foreach(IMAGE_FIELDS as $image)
     {
         validate_image($image, $errors);
     }
@@ -169,9 +150,9 @@ function upload_image(String $key, &$system_errors, &$params)
     }
 }
 
-function upload_all_images(&$images, &$system_errors, &$params)
+function upload_all_images(&$system_errors, &$params)
 {
-    foreach ($images as $image)
+    foreach (IMAGE_FIELDS as $image)
     {   
         upload_image($image, $system_errors, $params);
     }
@@ -225,16 +206,11 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 
 
 
-$keys = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "website", "photo", "letter", "zodiac_sign");
 $errors = array();
 $system_errors = array();
-$params = create_param_list($keys);
+$params = create_param_list();
 $maxlen = create_maxlen_arr();
-$required = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "letter", "zodiac_sign");
-$dates = array("birthdate");
-$numbers = array("course_year", "group_number");
-$images = array("photo");
 
-validate_form($params, $maxlen, $errors, $required, $dates, $numbers, $images);
-upload_all_images($images,  $system_errors, $params);
+validate_form($params, $maxlen, $errors);
+upload_all_images($system_errors, $params);
 process_data($params,  $errors, $system_errors);

@@ -1,13 +1,12 @@
 <?php
-define("SYS_ERR_BAD_PASSWORD", "Паролата за връзка с базата е грешна. Свържете се с администратор. Също така - има я в SQL файла. ;)");
-define("SYS_ERR_OTHER", "Проблем със системата. Опитайте по-късно.");
+include "./config.php";
 
 function add_user(&$params)
 {
     $host = "localhost";
     $db = "62169_Bistra_Chilikova";
     $username = "root";
-    $pass = "1";
+    $pass = "";
     try
     {
         $conn = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $username, $pass);
