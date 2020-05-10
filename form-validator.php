@@ -14,6 +14,8 @@ define("ERR_MSG_REQUIRED", "Полето е задължително.");
 define("ERR_MSG_TOO_LONG", "Превишена дължина.");
 define("ERR_MSG_BAD_DATE", "Неправилна дата.");
 define("ERR_MSG_NOT_NUMERIC", "Не е число.");
+define("ERR_MSG_IS_NEGATIVE", "Не може да е с отрицателна стойност.");
+define("ERR_MSG_NOT_IMAGE", "Файлът не е изображение.");
 
 session_start();
 
@@ -30,7 +32,15 @@ function create_param_list(&$keys)
 {
     $params = array();
     foreach ($keys as $key) {
-        $params[$key] = format_input($_POST[$key]);
+        if ($key != "photo")
+        {
+            $params[$key] = format_input($_POST[$key]);
+        }
+        else
+        {
+            $params[$key] = "";
+        }
+        
     }
     $_SESSION["fields"] = $params;
     return $params;
@@ -88,7 +98,18 @@ function check_if_number(String $key, &$params, &$errors)
     }
 }
 
-function validate_form(&$params, &$maxlen, &$errors, &$required, &$dates, &$numbers)
+function check_if_positive(String $key, &$params, &$errors)
+{
+    $value = $params[$key];
+    if (is_numeric($value)) {
+        if ($value<=0)
+        {
+            $errors[$key] = ERR_MSG_IS_NEGATIVE;
+        }
+    }
+}
+
+function validate_form(&$params, &$maxlen, &$errors, &$required, &$dates, &$numbers, &$images)
 {
     echo ("Validating <br>");
 
@@ -108,18 +129,62 @@ function validate_form(&$params, &$maxlen, &$errors, &$required, &$dates, &$numb
         check_if_number($key, $params, $errors);
     }
 
+    foreach ($numbers as $key) {
+        check_if_positive($key, $params, $errors);
+    }
 
-
-    // foreach($params as $key => $value)
-    // {
-    //     validate($key, $params, $maxlen, $errors);
-    // }
-
-
+    foreach($images as $image)
+    {
+        validate_image($image, $errors);
+    }
 }
 
-function process_data(&$params, &$error_message, &$errors)
+function validate_image(String $key, &$errors)
 {
+	$filetype = $_FILES[$key]["type"];
+    
+    if(substr( $filetype, 0, 5 ) != "image")
+    {
+        $errors[$key] = ERR_MSG_NOT_IMAGE;
+    }
+}
+
+function upload_image(String $key, &$system_errors, &$params)
+{
+	$filename = $_FILES[$key]["name"];
+    $source = $_FILES[$key]["tmp_name"];
+    $destination = "./photos/".basename($filename);
+    
+    if (move_uploaded_file($source, $destination))
+    {
+        $params[$key] = $destination;
+    }
+    else
+    {
+        $system_errors[$key] = "Couldn't upload";
+    }
+}
+
+function upload_all_images(&$images, &$system_errors, &$params)
+{
+    foreach ($images as $image)
+    {   
+        upload_image($image, $system_errors, $params);
+    }
+}
+
+
+
+function process_data(&$params, &$errors, &$system_errors)
+{
+    if (count($system_errors) != 0)
+    {
+        foreach($errors as $key => $error)
+        {
+            echo ($error . "<br>");
+        }
+        return;
+    }
     if (count($errors) == 0) 
     {
         foreach ($params as $key => $value) 
@@ -132,29 +197,13 @@ function process_data(&$params, &$error_message, &$errors)
     }
     else 
     {
-        // echo ("Errors:\n");
-
-        // foreach ($errors as $key => $err) 
-        // {
-        //     echo ($key . ": " . $err . "<br>");
-        // }
-
-        // foreach ($errors as $key => $err) 
-        // {
-        //     $error_message .= $err . '<br />';
-        // }
-
-        // $_SESSION['ERR'] = $error_message;
-
         foreach ($errors as $key => $err) 
         {
             $_SESSION[$key] = $err;
 
         }
 
-        //$_SESSION['ERR'] = $error_message;
 
-        
     header("Location: ./index.php");
     exit();
 
@@ -173,14 +222,17 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 }
 
 
-$error_message = "";
+
 $keys = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "website", "photo", "letter", "zodiac_sign");
 $errors = array();
+$system_errors = array();
 $params = create_param_list($keys);
 $maxlen = create_maxlen_arr();
-$required = $keys;
+$required = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "letter", "zodiac_sign");
 $dates = array("birthdate");
 $numbers = array("course_year", "group_number");
+$images = array("photo");
 
-validate_form($params, $maxlen, $errors, $required, $dates, $numbers);
-process_data($params, $error_message, $errors);
+validate_form($params, $maxlen, $errors, $required, $dates, $numbers, $images);
+upload_all_images($images,  $system_errors, $params);
+process_data($params,  $errors, $system_errors);

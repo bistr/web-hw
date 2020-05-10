@@ -19,6 +19,8 @@ function add_user(&$params)
         }
 
         $stmt->execute();
+        header("Location: ./success.html");
+        exit();
         echo "New records created successfully";
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
