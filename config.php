@@ -6,14 +6,44 @@ define("MAX_LENGTH_FAC_NUMBER", 63);
 define("MAX_LENGTH_WEBSITE", 255);
 define("MAX_LENGTH_LETTER", 65535);
 
+const MAX_LENGTH = array(
+    "fname" => 63,
+    "lname" => 63,
+    "course_major" => 255,
+    "course_year" => 3,
+    "fac_number" => 63,
+    "group_number" => 3,
+    "photo" => 255,
+    "zodiac_sign" => 63,
+    "website" => 255,
+    "letter" => 65535,
+    "birthdate" => 1
+);
+
+const MIN_LENGTH = array(
+    "fname" => 2,
+    "lname" => 2,
+    "course_major" => 1,
+    "course_year" => 1,
+    "fac_number" => 1,
+    "group_number" => 1,
+    "photo" => 0,
+    "zodiac_sign" => 3,
+    "website" => 0,
+    "letter" => 10,
+    "birthdate" => 1
+);
+
 define("ERR_MSG_REQUIRED", "Полето е задължително.");
 define("ERR_MSG_TOO_LONG", "Превишена дължина.");
 define("ERR_MSG_BAD_DATE", "Неправилна дата.");
 define("ERR_MSG_NOT_NUMERIC", "Не е число.");
 define("ERR_MSG_IS_NEGATIVE", "Не може да е с отрицателна стойност.");
 define("ERR_MSG_NOT_IMAGE", "Файлът не е изображение.");
+define("ERR_MSG_WRONG_FORMAT", "Грешка в данните. Не спазва правилен формат.");
 define("SYS_ERR_CANT_UPLOAD", "Проблем с добавянето на изображение.");
 define("SYS_ERR_BAD_PASSWORD", "Паролата за връзка с базата е грешна. Свържете се с администратор. Също така - има я в SQL файла. ;)");
+define("SYS_ERR_BAD_REQUEST", "Лоша заявка.");
 define("SYS_ERR_OTHER", "Проблем със системата. Опитайте по-късно.");
 
 define("UPLOAD_FOLDER","photos");
@@ -31,16 +61,17 @@ const NUMBER_FIELDS = array("course_year", "group_number");
 const IMAGE_FIELDS = array("photo");
 
 const PATTERN = array(
-    "fname" => "[A-ZА-Яa-zа-я\-]{2,63}",
-    "lname" => "[A-ZА-Яa-zа-я\-]{2,63}",
-    "course_major" => "[A-ZА-Яa-zа-я\-\s,]{2,255}",
-    "course_year" => "\d+",
-    "fac_number" => "[A-ZА-Яa-zа-я\-0-9]{2,63}",
-    "group_number" => "\d+",
-    "photo" => ".*",
-    "birthdate" => "\d{4}-\d{2}-\d{2}",
-    "zodiac_sign" => "[A-ZА-Яa-zа-я\-]{2,63}",
-    "website" => ".{0,255}", "letter" => ".*{1,65535}"
+    "fname" => "[A-ZА-Яa-zа-я\-]",
+    "lname" => "[A-ZА-Яa-zа-я\-]",
+    "course_major" => "[A-ZА-Яa-zа-я\-\s,]",
+    "course_year" => "\d",
+    "fac_number" => "[A-ZА-Яa-zа-я\-0-9]",
+    "group_number" => "\d",
+    "photo" => ".",
+    "birthdate" => "(\d{4}-\d{2}-\d{2})",
+    "zodiac_sign" => "[A-ZА-Яa-zа-я\-]",
+    "website" => ".", 
+    "letter" => "."
 );
 
 const PRETTY_PRINT = array(

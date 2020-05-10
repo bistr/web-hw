@@ -17,30 +17,14 @@ function create_param_list()
 {
     $params = array();
     foreach (KEYS as $key) {
-        if (array_key_exists($key, $_POST))
-        {
+        if (array_key_exists($key, $_POST)) {
             $params[$key] = format_input($_POST[$key]);
-        }
-        else
-        {
+        } else {
             $params[$key] = "";
         }
-        
     }
     $_SESSION["fields"] = $params;
     return $params;
-}
-
-function create_maxlen_arr()
-{
-    $maxlen = array();
-    $maxlen['fname'] = MAX_LENGTH_FNAME;
-    $maxlen['lname'] = MAX_LENGTH_LNAME;
-    $maxlen['course_major'] = MAX_LENGTH_MAJOR;
-    $maxlen['fac_number'] = MAX_LENGTH_FAC_NUMBER;
-    $maxlen['website'] = MAX_LENGTH_WEBSITE;
-    $maxlen['letter'] = MAX_LENGTH_LETTER;
-    return $maxlen;
 }
 
 function check_if_valid_date($key, &$params, &$errors)
@@ -51,35 +35,37 @@ function check_if_valid_date($key, &$params, &$errors)
     }
 }
 
-function validate(String $key, &$params, &$maxlen, &$errors)
+function create_format_message($key)
 {
-    if (!$params[$key]) {
-        $errors[$key] = ERR_MSG_REQUIRED;
-    } elseif (strlen($params[$key]) > $maxlen[$key]) {
-        $errors[$key] = ERR_MSG_TOO_LONG;
+    $symbols = "";
+    if (PATTERN[$key] == ".") {
+        $symbols = "всички";
+    } else if (PATTERN[$key] == "\d") {
+        $symbols = "цифри";
+    } else {
+        $symbols = PATTERN[$key];
+    }
+
+    $min = MIN_LENGTH[$key];
+    $max = MAX_LENGTH[$key];
+
+    return "Разрешени символи: " . $symbols . ", дължина между " . $min . " и " . $max . " символа.";
+}
+
+function check_if_matches_pattern(String $key, &$params, &$errors)
+{
+    $match = "";
+    $value = $params[$key];
+    $pattern = PATTERN[$key] . "{" . MIN_LENGTH[$key] . "," . MAX_LENGTH[$key] . "}";
+    if (!preg_match("/" . $pattern . "/", $value, $match)) {
+        $errors[$key] = ERR_MSG_WRONG_FORMAT . create_format_message($key);
     }
 }
 
 function check_if_filled(String $key, &$params, &$errors)
 {
     if (!$params[$key]) {
-        $errors[$key] = ERR_MSG_REQUIRED.$key.$params[$key];
-    }
-}
-
-function check_if_valid_length(String $key, &$params, int $maximum_length, &$errors)
-{
-    $value_length = strlen($params[$key]);
-    if ($value_length > $maximum_length) {
-        $errors[$key] = ERR_MSG_TOO_LONG;
-    }
-}
-
-function check_if_number(String $key, &$params, &$errors)
-{
-    $value = $params[$key];
-    if (!is_numeric($value)) {
-        $errors[$key] = ERR_MSG_NOT_NUMERIC;
+        $errors[$key] = ERR_MSG_REQUIRED . $key . $params[$key];
     }
 }
 
@@ -87,22 +73,20 @@ function check_if_positive(String $key, &$params, &$errors)
 {
     $value = $params[$key];
     if (is_numeric($value)) {
-        if ($value<=0)
-        {
+        if ($value <= 0) {
             $errors[$key] = ERR_MSG_IS_NEGATIVE;
         }
     }
 }
 
-function validate_form(&$params, &$maxlen, &$errors)
+function validate_form(&$params, &$errors)
 {
+    foreach (KEYS as $key) {
+        check_if_matches_pattern($key, $params, $errors);
+    }
 
     foreach (REQUIRED_FIELDS as $key) {
         check_if_filled($key, $params, $errors);
-    }
-
-    foreach ($maxlen as $key => $maximum_length) {
-        check_if_valid_length($key, $params, $maximum_length, $errors);
     }
 
     foreach (DATE_FIELDS as $key) {
@@ -110,12 +94,10 @@ function validate_form(&$params, &$maxlen, &$errors)
     }
 
     foreach (NUMBER_FIELDS as $key) {
-        check_if_number($key, $params, $errors);
         check_if_positive($key, $params, $errors);
     }
 
-    foreach(IMAGE_FIELDS as $image)
-    {
+    foreach (IMAGE_FIELDS as $image) {
         validate_image($image, $errors);
     }
 }
@@ -123,15 +105,13 @@ function validate_form(&$params, &$maxlen, &$errors)
 function validate_image(String $key, &$errors)
 {
     $filetype = $_FILES[$key]["type"];
-    $filename = $_FILES[$key]["type"];
+    $filename = $_FILES[$key]["name"];
 
-    if($filename == "")
-    {
+    if ($filename == "") {
         return;
     }
-    
-    if(substr( $filetype, 0, 5 ) != "image")
-    {
+
+    if (substr($filetype, 0, 5) != "image") {
         $errors[$key] = ERR_MSG_NOT_IMAGE;
     }
 }
@@ -139,14 +119,12 @@ function validate_image(String $key, &$errors)
 
 
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
-    echo "Bad request.";
+    show_system_error(SYS_ERR_BAD_REQUEST);
     exit();
 }
 
 $errors = array();
 $params = create_param_list();
-$maxlen = create_maxlen_arr();
 
-validate_form($params, $maxlen, $errors);
+validate_form($params,  $errors);
 process_data($params,  $errors);
-
