@@ -153,8 +153,8 @@ function process_data(&$params, &$error_message, &$errors)
         //$_SESSION['ERR'] = $error_message;
 
         
-    // header("Location: ./index.php");
-    // exit();
+    header("Location: ./index.php");
+    exit();
 
 
 

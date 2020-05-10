@@ -17,6 +17,8 @@ session_start();
 	if( isset($_SESSION['fields']) )
 	{
 		$fields = $_SESSION['fields'];
+		unset($_SESSION['fields']);
+
 	}
 	else
 	{
@@ -166,7 +168,7 @@ session_start();
             <div>
                 <h4>Мотивационно писмо</h4>
             </div>
-            <textarea name="letter" rows="5" cols="40" maxlength="65535" required value='<?php echo array_key_exists("letter", $fields) ? $fields["letter"] : ''; ?>'></textarea>
+            <textarea name="letter" rows="5" cols="40" maxlength="65535" required ><?php echo array_key_exists("letter", $fields) ? $fields["letter"] : ''; ?></textarea>
 			<p><?php
 				if( isset($_SESSION['letter']) )
 				{
