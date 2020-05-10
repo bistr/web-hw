@@ -1,5 +1,5 @@
 <?php
-include "./db-connection.php";
+include "./db_connection.php";
 
 function upload_image(String $key,  &$params)
 {

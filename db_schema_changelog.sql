@@ -2,6 +2,9 @@ CREATE DATABASE IF NOT EXISTS `62169_Bistra_Chilikova` CHARACTER SET = utf8mb4 C
 
 USE `62169_Bistra_Chilikova`;
 
+-- username: root
+-- password: ""
+
 CREATE TABLE Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fname VARCHAR(63),
