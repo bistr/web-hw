@@ -43,7 +43,13 @@ include "./config.php";
 			<p>".(isset($_SESSION[$key])?$_SESSION[$key]:'')."</p>
 			</section>
 			<hr>";
+
+			if (isset($_SESSION[$key])) {
+				unset($_SESSION[$key]);
+			}
 		}
+
+
 		?>
 
 

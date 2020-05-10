@@ -63,7 +63,7 @@ function validate(String $key, &$params, &$maxlen, &$errors)
 function check_if_filled(String $key, &$params, &$errors)
 {
     if (!$params[$key]) {
-        $errors[$key] = ERR_MSG_REQUIRED;
+        $errors[$key] = ERR_MSG_REQUIRED.$key.$params[$key];
     }
 }
 
