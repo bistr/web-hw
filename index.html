@@ -13,24 +13,24 @@
             <div>
                 <h4>Как се казвате?</h4>
             </div>
-            <input type="text" placeholder="Име" name="fname" maxlength="63" required>
-            <input type="text" placeholder="Фамилия" name="lname" maxlength="63" required>
+            <input type="text" placeholder="Име" name="fname" pattern="[A-ZА-Яa-zа-я\-]{2,63}" required>
+            <input type="text" placeholder="Фамилия" name="lname" pattern="[A-ZА-Яa-zа-я\-]{2,63}" required>
         </section>
         <hr>
         <section>
             <div>
                 <h4>Какво учите?</h4>
             </div>
-            <input type="text" name="course_major" placeholder="Специалност" maxlength="255" required>
-            <input type="number" name="course_year" placeholder="Курс" required>
+            <input type="text" name="course_major" placeholder="Специалност" pattern="[A-ZА-Яa-zа-я\-\s,]{2,255}" required>
+            <input type="number" name="course_year" placeholder="Курс" pattern="\d+" required>
         </section>
         <hr>
         <section>
             <div>
                 <h4>Информация</h4>
             </div>
-            <input type="text" name="fac_number" placeholder="Факултетен номер" maxlength="63" required>
-            <input type="number" name="group_number" placeholder="Група" required>
+            <input type="text" name="fac_number" placeholder="Факултетен номер" pattern="[A-ZА-Яa-zа-я\-0-9]{2,63}" required>
+            <input type="number" name="group_number" placeholder="Група" pattern="\d+" required>
         </section>
         <hr>
         <section>
