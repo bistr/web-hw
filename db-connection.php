@@ -11,7 +11,7 @@ function add_user(&$params)
     $conn = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $username, $pass);
     try {
 
-        $sql = "INSERT INTO Users (fname, lname, course_year, course_major, fac_number, group_number, birthdate, website, photo, letter) VALUES (:fname, :lname, :course_year, :course_major, :fac_number,  :group_number, :birthdate, :website, :photo, :letter)";
+        $sql = "INSERT INTO Users (fname, lname, course_year, course_major, fac_number, group_number, birthdate, website, photo, letter, zodiac_sign) VALUES (:fname, :lname, :course_year, :course_major, :fac_number,  :group_number, :birthdate, :website, :photo, :letter, :zodiac_sign)";
         $stmt = $conn->prepare($sql) or die("what?");
         foreach ($params as $key => $value) {
             $placeholder = ":" . $key;

@@ -1,6 +1,5 @@
-function calculate_sign(e)
-{
-    let zodiacName = ["Овен", "Телец", "Близнаци","Рак", "Лъв", "Дева", "Везни", "Скорпион", "Стрелец", "Козирог", "Водолей", "Риби"];
+function calculate_sign(e) {
+    let zodiacName = ["Овен", "Телец", "Близнаци", "Рак", "Лъв", "Дева", "Везни", "Скорпион", "Стрелец", "Козирог", "Водолей", "Риби"];
     let firstDayInMonth = {};
     firstDayInMonth[1] = 20;
     firstDayInMonth[2] = 20;
@@ -19,16 +18,14 @@ function calculate_sign(e)
     let parts = date.split("-")
     let month = parseInt(parts[1]);
     let day = parseInt(parts[2]);
-    let zodiacNumber = (month + 9)%12;
+    let zodiacNumber = (month + 9) % 12;
 
-    if (firstDayInMonth[month]>day)
-    {
-        zodiacNumber -=1;
-        if (zodiacNumber<0)
-        {
+    if (firstDayInMonth[month] > day) {
+        zodiacNumber -= 1;
+        if (zodiacNumber < 0) {
             zodiacNumber = 11;
         }
     }
     document.getElementById("zodiac_sign").value = zodiacName[zodiacNumber];
+    document.getElementById("zodiac_sign").textContent = zodiacName[zodiacNumber];
 }
-

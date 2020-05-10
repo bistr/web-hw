@@ -13,7 +13,8 @@ CREATE TABLE Users (
     birthdate DATE,
     website VARCHAR(255),
     photo VARCHAR(255),
-    letter TEXT
+    letter TEXT,
+    zodiac_sign VARCHAR(63)
 
 );
 
@@ -28,7 +29,8 @@ INSERT INTO
         birthdate,
         website,
         photo,
-        letter
+        letter,
+        zodiac_sign
     )
 VALUES
     (
@@ -41,5 +43,6 @@ VALUES
         '1998-04-10',
         'www.haha.com',
         'tralala',
-        'wow! so motivational'
+        'wow! so motivational',
+        'Aries'
     );

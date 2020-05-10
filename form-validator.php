@@ -2,6 +2,7 @@
 
 include "./db-connection.php";
 
+
 define("MAX_LENGTH_FNAME", 63);
 define("MAX_LENGTH_LNAME", 63);
 define("MAX_LENGTH_MAJOR", 255);
@@ -13,6 +14,9 @@ define("ERR_MSG_REQUIRED", "Полето е задължително.");
 define("ERR_MSG_TOO_LONG", "Превишена дължина.");
 define("ERR_MSG_BAD_DATE", "Неправилна дата.");
 define("ERR_MSG_NOT_NUMERIC", "Не е число.");
+
+session_start();
+
 
 function format_input($data)
 {
@@ -28,6 +32,7 @@ function create_param_list(&$keys)
     foreach ($keys as $key) {
         $params[$key] = format_input($_POST[$key]);
     }
+    $_SESSION["fields"] = $params;
     return $params;
 }
 
@@ -41,23 +46,6 @@ function create_maxlen_arr()
     $maxlen['website'] = MAX_LENGTH_WEBSITE;
     $maxlen['letter'] = MAX_LENGTH_LETTER;
     return $maxlen;
-}
-
-function extract_variables()
-{
-    $fname = format_input($_POST["fname"]);
-    $lname = format_input($_POST["lname"]);
-    $course_year = format_input($_POST["course_year"]);
-    $course_major = format_input($_POST["course_major"]);
-    $fac_number = format_input($_POST["fac_number"]);
-    $website = format_input($_POST["website"]);
-    $group_number = format_input($_POST["group_number"]);
-    $birthdate = format_input($_POST["birthdate"]);
-    $photo = format_input($_POST["photo"]);
-    $letter = format_input($_POST["letter"]);
-
-    //gotta validate first, bitch
-    //add_user($fname, $lname, $course_year, $course_major, $fac_number, $group_number, $birthdate, $website, $photo, $letter);
 }
 
 function check_if_valid_date($key, &$params, &$errors)
@@ -127,17 +115,49 @@ function validate_form(&$params, &$maxlen, &$errors, &$required, &$dates, &$numb
     //     validate($key, $params, $maxlen, $errors);
     // }
 
-    if (count($errors) == 0) {
-        foreach ($params as $key => $value) {
+
+}
+
+function process_data(&$params, &$error_message, &$errors)
+{
+    if (count($errors) == 0) 
+    {
+        foreach ($params as $key => $value) 
+        {
             echo ($key . " = " . $value . "<br>");
         }
         add_user($params);
-    } else {
-        echo ("Errors:\n");
+    }
+    else 
+    {
+        // echo ("Errors:\n");
 
-        foreach ($errors as $key => $err) {
-            echo ($key . ": " . $err . "<br>");
+        // foreach ($errors as $key => $err) 
+        // {
+        //     echo ($key . ": " . $err . "<br>");
+        // }
+
+        // foreach ($errors as $key => $err) 
+        // {
+        //     $error_message .= $err . '<br />';
+        // }
+
+        // $_SESSION['ERR'] = $error_message;
+
+        foreach ($errors as $key => $err) 
+        {
+            $_SESSION[$key] = $err;
+
         }
+
+        //$_SESSION['ERR'] = $error_message;
+
+        
+    // header("Location: ./index.php");
+    // exit();
+
+
+
     }
 }
 
@@ -151,8 +171,8 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 }
 
 
-
-$keys = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "website", "photo", "letter");
+$error_message = "";
+$keys = array("fname", "lname", "course_year", "course_major", "fac_number", "group_number", "birthdate", "website", "photo", "letter", "zodiac_sign");
 $errors = array();
 $params = create_param_list($keys);
 $maxlen = create_maxlen_arr();
@@ -161,3 +181,4 @@ $dates = array("birthdate");
 $numbers = array("course_year", "group_number");
 
 validate_form($params, $maxlen, $errors, $required, $dates, $numbers);
+process_data($params, $error_message, $errors);
